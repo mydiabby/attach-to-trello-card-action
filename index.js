@@ -88,7 +88,7 @@ const extractTrelloCardIds = (prBody, stopOnNonLink = true) =>   {
   // browsers submit textareas with \r\n line breaks on all platforms
   const browserEol = '\r\n';
   // requires that link be alone own line, and allows leading/trailing whitespace
-  const linkRegex = /^\s*(https\:\/\/trello\.com\/c\/(\w+))?\s*$/;
+  const linkRegex = /^.*\s(https\:\/\/trello\.com\/c\/(\w+))?\s*$/;
   
   const cardIds = [];
   const lines = prBody.split(browserEol);
@@ -130,7 +130,7 @@ const buildTrelloLinkComment = async (cardId) => {
     }
     
     const prUrl = evthookPayload.pull_request.html_url;
-    const cardIds = extractTrelloCardIds(evthookPayload.pull_request.body);
+    const cardIds = extractTrelloCardIds(evthookPayload.pull_request.title  + '\r\n' + evthookPayload.pull_request.body);
   
     if(cardIds && cardIds.length > 0) {
       for(const cardId of cardIds) {   
